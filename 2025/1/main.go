@@ -42,12 +42,30 @@ func main() {
 	for _, line := range lines {
 		distance := parseLine(line)
 
-		state += distance
-		state = ((state % dialSize) + dialSize) % dialSize
-
-		if state == 0 {
-			count++
+		if distance > 0 {
+			for range distance {
+				state++
+				state = ((state % dialSize) + dialSize) % dialSize
+				if state == 0 {
+					count++
+				}
+			}
+		} else {
+			for range -distance {
+				state--
+				state = ((state % dialSize) + dialSize) % dialSize
+				if state == 0 {
+					count++
+				}
+			}
 		}
+
+		// state += distance
+		// state = ((state % dialSize) + dialSize) % dialSize
+
+		// if state == 0 {
+		// 	count++
+		// }
 	}
 
 	fmt.Println(count)
