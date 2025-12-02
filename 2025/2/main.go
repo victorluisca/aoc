@@ -28,10 +28,21 @@ func parseLine(line string) (int, int) {
 
 func hasPattern(id int) bool {
 	strId := strconv.Itoa(id)
-	middle := len(strId) / 2
-	if strId[:middle] == strId[middle:] {
-		return true
+	length := len(strId)
+
+	for size := 1; size <= length/2; size++ {
+		if length%size != 0 {
+			continue
+		}
+		pattern := strId[:size]
+		if strings.Repeat(pattern, length/size) == strId {
+			return true
+		}
 	}
+	// middle := len(strId) / 2
+	// if strId[:middle] == strId[middle:] {
+	// 	return true
+	// }
 	return false
 }
 
@@ -41,7 +52,7 @@ func main() {
 	sum := 0
 	for _, line := range lines {
 		min, max := parseLine(line)
-		for i := min; i < max; i++ {
+		for i := min; i <= max; i++ {
 			if hasPattern(i) {
 				sum += i
 			}
