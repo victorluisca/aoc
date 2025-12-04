@@ -38,6 +38,34 @@ func countAdjacent(grid [][]rune, r, c int) int {
 	return count
 }
 
+func remove(grid [][]rune) (int, [][]rune) {
+	rows := len(grid)
+	cols := len(grid[0])
+
+	newGrid := make([][]rune, rows)
+	for i := range newGrid {
+		newGrid[i] = make([]rune, cols)
+	}
+
+	removed := 0
+	for r := range rows {
+		for c := range cols {
+			if grid[r][c] == '@' {
+				if countAdjacent(grid, r, c) < 4 {
+					newGrid[r][c] = '.'
+					removed++
+				} else {
+					newGrid[r][c] = '@'
+				}
+			} else {
+				newGrid[r][c] = '.'
+			}
+		}
+	}
+
+	return removed, newGrid
+}
+
 func main() {
 	lines := strings.Split(strings.TrimSpace(getInput()), "\n")
 	grid := make([][]rune, len(lines))
@@ -46,15 +74,24 @@ func main() {
 	}
 
 	count := 0
-	for r := range grid {
-		for c := range grid[r] {
-			if grid[r][c] == '@' {
-				if countAdjacent(grid, r, c) < 4 {
-					count++
-				}
-			}
+	for {
+		removed, newGrid := remove(grid)
+		if removed == 0 {
+			break
 		}
+		count += removed
+		grid = newGrid
 	}
+
+	// for r := range grid {
+	// 	for c := range grid[r] {
+	// 		if grid[r][c] == '@' {
+	// 			if countAdjacent(grid, r, c) < 4 {
+	// 				count++
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	fmt.Println(count)
 }
